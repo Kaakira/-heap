@@ -1,4 +1,4 @@
-﻿class RGB {
+class RGB {
   r: number;
   g: number;
   b: number;
@@ -46,6 +46,10 @@ export class GlassEffectBoard {
     }[];
   }[] = [];
 
+  private calcRandom(seed): number {
+    return (Math.random() > 0.4 ? 1 : -1) * Math.random() * seed;
+  }
+
   constructor(param: { id: string; area: { col: number; row: number } }) {
 
     this.canvas = <HTMLCanvasElement>document.getElementById(param.id);
@@ -57,35 +61,34 @@ export class GlassEffectBoard {
     this.width = this.canvas.width;
     // 二维坐标点数组
     let points: {
+      // 当前坐标位置
       x: number;
       y: number;
+      // 初始原点坐标位置(初始化后不能改动)
       sx: number;
       sy: number;
+      // 能够移动的范围
       moveX: number;
       moveY: number;
       // 运动周期持续时间 毫秒单位
       duration: number;
     }[][] = [];
-    // 根据二维，“随机”均匀分布各点
-    console.log(this.height+"|"+this.width);
+    // 平局每列分部点，每行分布点
+    let columnWidth = this.width /( this.area.col-1);
+    let rowHeight = this.height / (this.area.row -1);
     for (let col = 0; col < this.area.col; col++) {
       points[col] = [];
       for (let row = 0; row < this.area.row; row++) {
         let point = {
-          x:
-            col * (this.width / (this.area.col - 1)) + col * 70 - this.area.col * 55 + Math.random() * this.area.col * 30,
-          y:
-            row * (this.height / (this.area.row - 1)) +
-            row * 70 -
-            this.area.row * 55 +
-            Math.random() * this.area.row * 30,
-          moveX: 0,
-          moveY: 0,
+          x: Math.min((col - 1 + col), this.area.col) * columnWidth + this.calcRandom(columnWidth),
+          y: Math.min((row - 1 + row), this.area.row) * rowHeight + this.calcRandom(rowHeight),
+          moveX: Math.random() * 100,
+          moveY: Math.random() * 100,
           sx: 0,
           sy: 0,
           duration: 3000 + Math.random() * 3000
         };
-        point.moveX = Math.random() * 100;
+        // 随机加速度
         point.sx = point.x;
         point.sy = point.y;
         points[col].push(point);
@@ -174,10 +177,11 @@ export class GlassEffectBoard {
       // 移动完成百分比
       if (persentComplete < 1) {
         point.x = point.sx + point.moveX * this.makeEaseInOut2(persentComplete);
+        //point.y = point.sy + point.moveY * this.makeEaseInOut2(persentComplete);
       } else {
         persentComplete = persentComplete - 1;
-        point.x =
-          point.sx + point.moveX * this.makeEaseInOut2(1 - persentComplete);
+        point.x = point.sx + point.moveX * this.makeEaseInOut2(1 - persentComplete);
+        //point.y = point.sy + point.moveY * this.makeEaseInOut2(1 - persentComplete);
       }
     }
   }
