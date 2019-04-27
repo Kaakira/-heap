@@ -1,4 +1,4 @@
-使用 typescript + canvas 实现 pc qq 的登陆面板
+typescript + canvas 实现 pc qq 的登陆面板
 
 ## qq 登录面板
 
