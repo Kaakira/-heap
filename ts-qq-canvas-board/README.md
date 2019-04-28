@@ -1,4 +1,4 @@
-typescript + canvas 实现 pc qq 的登陆面板
+typescript + canvas实现pc端qq 登陆面板的动态背景特效
 
 ## qq 登录面板
 
