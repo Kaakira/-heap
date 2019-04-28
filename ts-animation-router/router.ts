@@ -32,7 +32,7 @@ export class Router {
     private defaultPage: RouterPage
   ) {
     let fade = this.bodyElement.firstElementChild;
-    fade.classList.add("fade-scale show");
+    fade.classList.add("fade-scale","show");
 
     document.body.addEventListener("click", (e) => {
       //
